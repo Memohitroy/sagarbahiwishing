@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Holi Sagar!</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .container {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      max-width: 500px;
+    }
+
+    h1 {
+      font-size: 3em;
+      color: #e91e63;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    }
+
+    p {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      color: #444;
+    }
+
+    button {
+      padding: 12px 25px;
+      background: #ff5722;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #e91e63;
+      transform: scale(1.1);
+    }
+
+    .wish-message {
+      margin-top: 20px;
+      display: none;
+      animation: fadeIn 2s forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>🌸 Happy Holi, Sagar! 🌸</h1>
+    <p>May your life be filled with colors of joy, love, and happiness!</p>
+    <button onclick="showWish()">Click to See Magic 🎨</button>
+
+    <div class="wish-message" id="wish">
+      <h2>🎉 Holi Ki Hardik Shubhkamnaye! 🎉</h2>
+      <p>Rango ke is tyohar par aapki zindagi bhi khushiyon se bhar jaye! 🌈</p>
+    </div>
+  </div>
+
+  <!-- Background Music -->
+  <audio id="bg-music" src="wish holi song.mp3"></audio>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confetti"></canvas>
+
+  <script>
+    function showWish() {
+      document.getElementById('wish').style.display = 'block';
+      startConfetti();
+
+      // Music play on button click
+      const music = document.getElementById('bg-music');
+      music.play();
+      music.loop = true; // Repeat music
+    }
+
+    // Confetti Animation
+    const canvas = document.getElementById('confetti');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const pieces = [];
+    const numberOfPieces = 150;
+
+    function randomColor() {
+      const colors = ['#f44336', '#e91e63', '#9c27b0', '#3f51b5', '#03a9f4', '#4caf50', '#ffeb3b', '#ff9800'];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    function ConfettiPiece() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height - canvas.height;
+      this.size = Math.random() * 10 + 5;
+      this.speed = Math.random() * 3 + 2;
+      this.color = randomColor();
+    }
+
+    ConfettiPiece.prototype.update = function () {
+      this.y += this.speed;
+      if (this.y > canvas.height) {
+        this.y = -this.size;
+        this.x = Math.random() * canvas.width;
+      }
+    };
+
+    ConfettiPiece.prototype.draw = function () {
+      ctx.fillStyle = this.color;
+      ctx.fillRect(this.x, this.y, this.size, this.size);
+    };
+
+    function startConfetti() {
+      for (let i = 0; i < numberOfPieces; i++) {
+        pieces.push(new ConfettiPiece());
+      }
+      updateConfetti();
+    }
+
+    function updateConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < pieces.length; i++) {
+        pieces[i].update();
+        pieces[i].draw();
+      }
+      requestAnimationFrame(updateConfetti);
+    }
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>
+
